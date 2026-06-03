@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DACHAIR?! | Official Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --accent-green: #00ff6e;
+            --accent-glow: rgba(0, 255, 110, 0.25);
+            --dark-bg: #000000;
+            --card-bg: #0a0a0a;
+            --border-color: #111111;
+            --text-gray: #aaaaaa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--dark-bg); color: #ffffff; overflow-x: hidden; transition: background 0.5s ease, filter 0.3s ease; }
+
+        /* Эффект Паники / Взлома сайта (Glitch) */
+        .glitch-active { animation: glitchSkew 2s infinite linear alternate-reverse; filter: hue-rotate(10deg) contrast(1.2); }
+        @keyframes glitchSkew { 
+            0%, 100% { transform: skewX(0deg); text-shadow: none; } 
+            20% { transform: skewX(-0.5deg); text-shadow: 1px 0 #ff00ff, -1px 0 #00ffff; }
+            40% { transform: skewX(0.5deg); text-shadow: -1px 0 #ff0000, 1px 0 #00ff00; }
+        }
+
+        /* Реалистичный DDoS Эффект */
+        .ddos-lagging { animation: interfaceLag 1.5s infinite steps(1), screenGlitch 0.8s infinite alternate ease-in-out; cursor: wait !important; }
+        @keyframes interfaceLag { 0%, 20%, 60%, 100% { opacity: 1; filter: blur(0); } 10% { opacity: 0.8; filter: blur(0.5px); } }
+        @keyframes screenGlitch { 0% { border-color: var(--border-color); } 50% { border-color: #ff3333; } }
+        
+        #ddos-site-warning { background: #ff3333; color: #000; font-weight: 900; text-align: center; padding: 8px; font-size: 0.8rem; display: none; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 20px rgba(255,51,51,0.5); z-index: 999999; position: relative; }
+        #ddos-overlay { position: fixed; bottom: 30px; right: 30px; width: 380px; background: #050000; border: 1px solid #ff3333; z-index: 99995; display: none; box-shadow: 0 0 30px rgba(255,51,51,0.2); font-family: monospace; }
+        .ddos-header { background: #1a0202; color: #ff3333; padding: 10px; font-size: 11px; font-weight: bold; border-bottom: 1px solid #ff3333; display: flex; justify-content: space-between; }
+        .ddos-logs { padding: 10px; font-size: 10px; height: 140px; overflow-y: auto; color: #ff9999; line-height: 1.4; }
+
+        /* Навигация */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 25px 5%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid #111; position: relative; z-index: 10; }
+        .logo-area { display: flex; flex-direction: column; }
+        .logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; }
+        .logo span { color: var(--accent-green); text-shadow: 0 0 10px var(--accent-glow); }
+        .author-status { font-size: 0.65rem; color: #555; text-transform: uppercase; font-weight: 900; margin-top: 2px; letter-spacing: 0.5px; transition: color 0.3s; }
+        .author-status span { color: var(--accent-green); }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
+        .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        .lang-switcher { display: flex; gap: 5px; }
+        .lang-btn { background: #111; border: 1px solid #222; color: #fff; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; cursor: pointer; }
+        .lang-btn.active { background: var(--accent-green); color: #000; border-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-glow); }
+
+        /* Главный экран */
+        .hero { padding: 60px 5% 40px 5%; display: grid; grid-template-columns: 1.3fr 1fr; gap: 50px; align-items: center; min-height: 450px; }
+        .hero-text h1 { font-size: 3.2rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero-text h1 span { color: var(--accent-green); text-shadow: 0 0 15px var(--accent-glow); }
+        .hero-text p { color: var(--text-gray); font-size: 0.95rem; max-width: 500px; margin-bottom: 35px; line-height: 1.7; }
+        .hero-btns { display: flex; gap: 15px; flex-wrap: wrap; }
+        
+        .btn { padding: 14px 28px; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; display: inline-block; text-align: center; }
+        .btn-primary { background: #fff; color: #000; }
+        .btn-primary:hover { background: var(--accent-green); box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-2px); }
+        .btn-secondary { background: transparent; color: #fff; border: 1px solid #fff; }
+        .btn-secondary:hover { border-color: var(--accent-green); color: var(--accent-green); box-shadow: 0 0 15px rgba(0,255,110,0.15); transform: translateY(-2px); }
+
+        /* Блок анонсов */
+        .announcement-box { border: 1px dashed var(--accent-green); background: rgba(0, 255, 110, 0.01); padding: 40px; text-align: center; position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: inset 0 0 20px rgba(0,0,0,0.6); }
+        .announcement-box.urgent-mode { border: 1px dashed #ff3333; background: rgba(255, 51, 51, 0.02); box-shadow: 0 0 25px rgba(255, 51, 51, 0.05); }
+        
+        .badge { background: #111; border: 1px solid #222; color: var(--accent-green); font-size: 0.65rem; font-weight: 900; padding: 4px 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 15px; transition: all 0.3s ease; }
+        .badge.urgent { color: #ff3333; border-color: #ff3333; animation: pulse-glow 1.5s infinite; }
+        
+        .announcement-box h2 { font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .announcement-box p { color: var(--text-gray); font-size: 0.8rem; max-width: 340px; line-height: 1.6; }
+        
+        /* Счетчик живого онлайна на сайте */
+        .online-counter-badge { background: rgba(0, 255, 234, 0.07); border: 1px solid #00ffea; color: #00ffea; font-size: 10px; font-weight: 900; padding: 3px 10px; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: none; }
+
+        /* Эффект печати текста */
+        .typing-loader { display: inline-flex; gap: 2px; margin-left: 5px; vertical-align: middle; }
+        .typing-loader span { width: 3px; height: 3px; background-color: #ff3333; border-radius: 50%; animation: dota 1.4s infinite; opacity: 0.3; }
+        .typing-loader span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-loader span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dota { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.3); } }
+
+        .server-status-mini { margin-top: 15px; font-family: monospace; font-size: 11px; color: #555; display: flex; gap: 15px; }
+        .server-status-mini span { color: var(--accent-green); font-weight: bold; }
+        .countdown-display { font-size: 2rem; font-weight: 900; color: var(--accent-green); font-family: monospace; letter-spacing: 2px; margin-top: 15px; text-shadow: 0 0 10px rgba(0,255,110,0.3); }
+
+        /* Статус разработки */
+        .production-status { padding: 40px 5%; }
+        .production-status h2 { font-size: 1.8rem; font-weight: 900; color: var(--accent-green); margin-bottom: 30px; text-shadow: 0 0 10px var(--accent-glow); }
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .status-card { background: var(--card-bg); border: 1px solid #141414; padding: 30px; position: relative; transition: border-color 0.3s ease, transform 0.3s ease; }
+        .status-card:hover { border-color: #222; transform: translateY(-2px); }
+        .status-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .status-info label { font-size: 0.75rem; color: var(--text-gray); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .status-info span { font-size: 0.9rem; font-weight: 900; color: var(--accent-green); }
+        .status-title { font-size: 1.1rem; font-weight: 700; margin-top: 5px; color: #fff; }
+        
+        .progress-bar-bg { width: 100%; height: 2px; background: #161616; margin-top: 15px; position: relative; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--accent-green); width: 0%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px var(--accent-green); }
+        #phonk-player-status { font-size: 0.65rem; color: #444; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-top: 15px; text-align: center; width: 100%; }
+        #phonk-player-status span { color: #00ffea; }
+
+        /* 👑 Сверхнадежная Админ-Панель V3 (Никогда не перекрывается оверлеями) */
+        #admin-panel-v3 { position: fixed; bottom: 20px; left: 20px; width: 250px; background: rgba(0,0,0,0.98); border: 1px solid var(--accent-green); padding: 12px; z-index: 999999999 !important; box-shadow: 0 0 25px rgba(0, 255, 110, 0.35); }
+        .panel-title { color: var(--accent-green); font-size: 0.65rem; font-weight: 900; text-align: center; margin-bottom: 10px; letter-spacing: 1.5px; text-shadow: 0 0 5px var(--accent-glow); }
+        .admin-row { margin-bottom: 7px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .admin-row input[type="checkbox"] { accent-color: var(--accent-green); }
+        .admin-range-wrap { margin-bottom: 6px; }
+        .admin-range-wrap div { display: flex; justify-content: space-between; font-size: 0.6rem; color: #fff; margin-bottom: 2px; text-transform: uppercase; }
+        .admin-range-wrap input[type="range"] { width: 100%; accent-color: var(--accent-green); background: #1a1a1a; height: 3px; outline: none; }
+        .admin-input-text { width: 100%; background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff; font-size: 0.65rem; padding: 5px; margin-bottom: 5px; outline: none; }
+        .admin-input-text:focus { border-color: var(--accent-green); }
+        .admin-select { width: 100%; background: #0a0a0a; border: 1px solid #1a1a1a; color: var(--accent-green); font-size: 0.65rem; padding: 4px; margin-bottom: 6px; outline: none; font-weight: bold; text-transform: uppercase; }
+        
+        /* Кнопки режимов */
+        .abuse-title { color: #ff3333; font-size: 0.6rem; font-weight: 900; text-align: center; margin: 8px 0 5px 0; letter-spacing: 1px; }
+        .abuse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
+        .btn-abuse { background: #050505; border: 1px solid #151515; color: #ff3333; font-size: 0.55rem; font-weight: 900; padding: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-abuse.active { background: #ff3333; color: #000; border-color: #ff3333; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
+        .btn-party { background: #050505; border: 1px solid #151515; color: #00ffea; font-size: 0.55rem; font-weight: 900; padding: 6px; width: 100%; cursor: pointer; text-transform: uppercase; transition: all 0.2s; margin-bottom: 4px; }
+        .btn-party.active { background: #00ffea; color: #000; border-color: #00ffea; }
+        .btn-save-v3 { background: var(--accent-green); color: #000; font-size: 0.65rem; font-weight: 900; border: none; width: 100%; padding: 7px; cursor: pointer; text-transform: uppercase; margin-top: 5px; }
+
+        /* Экраны блокировок / Заглушки */
+        #screamer-element { position: fixed; top:0; left:0; width:100vw; height:100vh; background: url('https://i.imgur.com/8Nf9XmB.jpg') center/cover no-repeat; z-index: 9999999; display: none; }
+        #fake-404, #fake-504, #maintenance-block, #ban-block { position: fixed; top:0; left:0; width:100vw; height:100vh; background: #000; color: #fff; z-index: 999999; display: none; padding: 50px; font-family: monospace; }
+        #maintenance-block, #ban-block { text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px rgba(255,51,51,0.2); opacity: 1; } 50% { box-shadow: 0 0 15px rgba(255,51,51,0.6); opacity: 0.6; } }
+        .footer-text { text-align: center; color: #161616; font-size: 0.65rem; font-weight: 700; padding: 50px 0; letter-spacing: 1px; }
+
+        /* Адаптивность под мобильные устройства сайта */
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 30px; text-align: center; }
+            .hero-text h1 { font-size: 2.3rem; }
+            .hero-text p { margin: 0 auto 25px auto; }
+            .hero-btns { justify-content: center; }
+            .status-grid { grid-template-columns: 1fr; }
+            nav { flex-direction: column; gap: 15px; padding: 15px; }
+            .nav-links { gap: 15px; font-size: 0.75rem; }
+            #admin-panel-v3 { width: calc(100% - 40px); bottom: 10px; left: 20px; max-height: 250px; overflow-y: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Системные Наложения (Overlays) -->
+    <div id="ddos-site-warning">⚠️ ВНИМАНИЕ: ОБНАРУЖЕНА КРИТИЧЕСКАЯ СЕТЕВАЯ АТАКА (DDOS). ФИЛЬТРАЦИЯ ТРАФИКА...</div>
+    <div id="screamer-element"></div>
+    <div id="fake-404"><h1>404 Not Found</h1><hr><p>nginx/1.18.0 (Ubuntu)</p></div>
+    <div id="fake-504"><h1>504 Gateway Time-out</h1><hr><p>nginx</p></div>
+    <div id="maintenance-block">
+        <h1 style="color:var(--accent-green); margin-bottom:15px;">SERVER UNDER MAINTENANCE</h1>
+        <p style="color:#aaa; font-size:14px; max-width:400px;">Администратор временно ограничил доступ к хабу для проведения технических обновлений базы данных.</p>
+    </div>
+    <div id="ban-block">
+        <h1 style="color:#ff3333; margin-bottom:15px;">🛑 ACCESS DENIED / ВЫ ЗАБАНЕНЫ</h1>
+        <p style="color:#aaa; font-size:13px; max-width:500px; line-height:1.6;">Ваш сетевой узел был заблокирован администратором Dachair?! Production за подозрительную активность и попытку инъекции скриптов.</p>
+    </div>
+
+    <!-- Монитор логов DDoS атаки -->
+    <div id="ddos-overlay">
+        <div class="ddos-header">
+            <span>🛡️ TRAFFIC_SHIELD.EXE [ACTIVE]</span>
+            <span style="color:#fff;" id="ddos-clock">00:00:00</span>
+        </div>
+        <div class="ddos-logs" id="ddos-log-container"></div>
+    </div>
+
+    <nav>
+        <div class="logo-area">
+            <div class="logo">DACHAIR<span>?!</span></div>
+            <div class="author-status" id="lbl-author-status">STATUS: <span>ONLINE</span></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="https://www.youtube.com/@Dachair-legit" target="_blank">Youtube</a></li>
+            <li><a href="https://discord.gg/nDAb9ewJk" target="_blank">Discord</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Streams</a></li>
+            <li>
+                <div class="lang-switcher">
+                    <button class="lang-btn active">RU</button>
+                    <button class="lang-btn">EN</button>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-text">
+            <h1><span>#Dachair</span> Production</h1>
+            <p>Official content database of Dachair?!. Creator of skibidi remastered, specializing in complex custom lighting and 3D projects inside Source Filmmaker.</p>
+            <div class="hero-btns">
+                <a href="https://www.youtube.com/@Dachair-legit" target="_blank" class="btn btn-primary">Watch on YouTube</a>
+                <a href="https://discord.gg/nDAb9ewJk" target="_blank" class="btn btn-secondary">Our Discord</a>
+            </div>
+        </div>
+
+        <!-- Модуль Анонсов и Срочных Уведомлений -->
+        <div class="announcement-box" id="main-announcement-zone">
+            <div id="badge-element" class="badge">Coming Soon</div>
+            <h2 id="announcement-title">Awaiting Announcement</h2>
+            <p id="announcement-desc">The release timer is temporarily hidden. Production is in the storyboarding stage. Precise countdown coming soon!</p>
+            <div id="timer-container" class="countdown-display" style="display: none;">00:00:00:00</div>
+            
+            <div class="online-counter-badge" id="lbl-online-counter">🔥 1,240 animators online</div>
+
+            <div class="server-status-mini">
+                <div>PING: <span id="lbl-realtime-ping">28 ms</span></div>
+                <div>TRAFFIC: <span id="lbl-realtime-load">4 rps</span></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="production-status">
+        <h2>Current Production Status</h2>
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-info">
+                    <label>Development in Source Filmmaker (SFM)</label>
+                    <span id="sfm-percent">0%</span>
+                </div>
+                <div class="status-title">Animation, posing, and scene simulation</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="sfm-fill"></div></div>
+            </div>
+            
+            <div class="status-card">
+                <div class="status-info">
+                    <label>Editing & Visual Effects (VFX)</label>
+                    <span id="vfx-percent">0%</span>
+                </div>
+                <div class="status-title">Compositing, custom lighting, and color grading</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="vfx-fill"></div></div>
+            </div>
+        </div>
+        <div id="phonk-player-status">NOW STREAMING: <span id="lbl-current-track">PHONK MANIA VOL.1 (SLOWED)</span></div>
+    </section>
+
+    <!-- 🛠️ ПОЛНАЯ АДМИН-ПАНЕЛЬ V3 -->
+    <div id="admin-panel-v3">
+        <div class="panel-title">DACHAIR PANEL V3</div>
+        
+        <label class="admin-row">
+            <input type="checkbox" id="chk-show-timer">
+            <span>Показывать таймер</span>
+        </label>
+
+        <div class="admin-range-wrap">
+            <div><span>SFM Progress:</span><span id="lbl-sfm">0%</span></div>
+            <input type="range" id="rng-sfm" min="0" max="100" value="0">
+        </div>
+
+        <div class="admin-range-wrap">
+            <div><span>VFX Progress:</span><span id="lbl-vfx">0%</span></div>
+            <input type="range" id="rng-vfx" min="0" max="100" value="0">
+        </div>
+
+        <input type="text" id="txt-timer-date" class="admin-input-text" value="2026-06-15T18:00:00" placeholder="Таймер: ГГГГ-ММ-ДДTЧЧ:ММ:СС">
+        <input type="text" id="txt-custom-title" class="admin-input-text" placeholder="Свой заголовок анонса...">
+        <input type="text" id="txt-fan-message" class="admin-input-text" placeholder="Текст сообщения фанатам...">
+        
+        <label class="admin-row">
+            <input type="checkbox" id="chk-urgent-msg">
+            <span style="color: #ff3333;">Ожидаем срочное сообщение</span>
+        </label>
+
+        <input type="text" id="txt-online-count" class="admin-input-text" placeholder="Сколько онлайна показать? (напр. 5,230)">
+        <label class="admin-row">
+            <input type="checkbox" id="chk-show-online">
+            <span style="color: #00ffea;">Показывать счетчик онлайна</span>
+        </label>
+
+        <select id="sel-author-status" class="admin-select">
+            <option value="ONLINE">В сети (Online)</option>
+            <option value="RENDERING... 🎬">Рендерит серию 🎬</option>
+            <option value="SLEEPING 💤">Спит 💤</option>
+        </select>
+
+        <input type="text" id="txt-phonk-track" class="admin-input-text" value="PHONK MANIA VOL.1 (SLOWED)" placeholder="Название Phonk трека...">
+        
+        <label class="admin-row">
+            <input type="checkbox" id="chk-maintenance">
+            <span style="color: #00ffea;">Технические работы (Lock)</span>
+        </label>
+
+        <div class="abuse-title">⚡ АДМИН АБЬЮЗ РЕЖИМЫ ⚡</div>
+        <div class="abuse-grid">
+            <button class="btn-abuse" id="btn-screamer">Скример</button>
+            <button class="btn-abuse" id="btn-404">Фейк 404</button>
+            <button class="btn-abuse" id="btn-ddos">Фейк ДДОС</button>
+            <button class="btn-abuse" id="btn-504">Отвалить (504)</button>
+            <button class="btn-abuse" id="btn-glitch" style="color:#ff00ff;">Глитч/Паника</button>
+            <button class="btn-abuse" id="btn-ban" style="color:#ffaa00;">Бан гостя</button>
+        </div>
+        <button class="btn-party" id="btn-party-hard">Дискотека (Party Hard)</button>
+
+        <button class="btn-save-v3" onclick="updateFirebaseData()">Сохранить данные</button>
+    </div>
+
+    <div class="footer-text">© 2026 DACHAIR?! PRODUCTION. ALL RIGHTS RESERVED.</div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://aaaaa-21a66-default-rtdb.firebaseio.com" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let timerInterval = null;
+        let ddosInterval = null;
+
+        db.ref('siteData').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (!data) return;
+
+            document.getElementById('sfm-percent').innerText = (data.sfm || 0) + '%';
+            document.getElementById('sfm-fill').style.width = (data.sfm || 0) + '%';
+            document.getElementById('lbl-sfm').innerText = (data.sfm || 0) + '%';
+            document.getElementById('rng-sfm').value = data.sfm || 0;
+
+            document.getElementById('vfx-percent').innerText = (data.vfx || 0) + '%';
+            document.getElementById('vfx-fill').style.width = (data.vfx || 0) + '%';
+            document.getElementById('lbl-vfx').innerText = (data.vfx || 0) + '%';
+            document.getElementById('rng-vfx').value = data.vfx || 0;
+
+            document.getElementById('lbl-current-track').innerText = data.currentTrack || "PHONK MANIA VOL.1 (SLOWED)";
+            document.getElementById('txt-phonk-track').value = data.currentTrack || "PHONK MANIA VOL.1 (SLOWED)";
+            document.getElementById('maintenance-block').style.display = data.maintenanceActive ? 'flex' : 'none';
+            document.getElementById('chk-maintenance').checked = data.maintenanceActive || false;
+
+            document.getElementById('lbl-author-status').innerHTML = `STATUS: <span>${data.authorStatus || 'ONLINE'}</span>`;
+            document.getElementById('sel-author-status').value = data.authorStatus || 'ONLINE';
+
+            document.getElementById('chk-show-timer').checked = data.showTimer || false;
+            document.getElementById('txt-timer-date').value = data.timerDate || "2026-06-15T18:00:00";
+            document.getElementById('txt-custom-title').value = data.customTitle || "";
+            document.getElementById('txt-fan-message').value = data.fanMessage || "";
+            document.getElementById('chk-urgent-msg').checked = data.urgentMessageActive || false;
+            document.getElementById('txt-online-count').value = data.onlineCount || "1,240";
+            document.getElementById('chk-show-online').checked = data.showOnline || false;
+
+            const onlineCounter = document.getElementById('lbl-online-counter');
+            if (data.showOnline) {
+                onlineCounter.style.display = 'inline-block';
+                onlineCounter.innerText = `🔥 ${data.onlineCount || '1,240'} animators online`;
+            } else {
+                onlineCounter.style.display = 'none';
+            }
+
+            const box = document.getElementById('main-announcement-zone');
+            const badge = document.getElementById('badge-element');
+            const title = document.getElementById('announcement-title');
+            const desc = document.getElementById('announcement-desc');
+            const timerDisp = document.getElementById('timer-container');
+
+            clearInterval(timerInterval);
+
+            if (data.urgentMessageActive) {
+                box.classList.add('urgent-mode');
+                badge.className = "badge urgent";
+                badge.innerText = "🚨 СРОЧНО";
+                title.innerHTML = 'Ожидаем срочное сообщение от Dachair?!<div class="typing-loader"><span></span><span></span><span></span></div>';
+                desc.innerText = data.fanMessage ? data.fanMessage : "Аниматор формулирует мысль...";
+                timerDisp.style.display = "none";
+            } 
+            else if (data.fanMessage && data.fanMessage.trim() !== "") {
+                box.classList.remove('urgent-mode');
+                badge.className = "badge";
+                badge.innerText = "💬 СООБЩЕНИЕ";
+                title.innerText = data.customTitle ? data.customTitle : "Dachair?! говорит:";
+                desc.innerText = data.fanMessage;
+                timerDisp.style.display = "none";
+            } 
+            else {
+                box.classList.remove('urgent-mode');
+                badge.className = "badge";
+                if (data.showTimer) {
+                    badge.innerText = "COUNTDOWN";
+                    title.innerText = data.customTitle ? data.customTitle : "NEXT EPISODE RELEASE";
+                    desc.innerText = "Production is entering final stages. Get ready for the premier!";
+                    timerDisp.style.display = "block";
+                    startCountdown(data.timerDate);
+                } else {
+                    badge.innerText = "COMING SOON";
+                    title.innerText = data.customTitle ? data.customTitle : "Awaiting Announcement";
+                    desc.innerText = "The release timer is temporarily hidden. Precise countdown coming soon!";
+                    timerDisp.style.display = "none";
+                }
+            }
+
+            document.getElementById('screamer-element').style.display = data.abuse?.screamer ? 'block' : 'none';
+            document.getElementById('fake-404').style.display = data.abuse?.error404 ? 'block' : 'none';
+            document.getElementById('fake-504').style.display = data.abuse?.error504 ? 'block' : 'none';
+            document.getElementById('ban-block').style.display = data.abuse?.banActive ? 'flex' : 'none';
+            
+            if (data.abuse?.glitch) document.body.classList.add('glitch-active');
+            else document.body.classList.remove('glitch-active');
+
+            if (data.abuse?.ddos) {
+                document.body.classList.add('ddos-lagging');
+                document.getElementById('ddos-site-warning').style.display = 'block';
+                document.getElementById('ddos-overlay').style.display = 'block';
+                document.getElementById('lbl-realtime-ping').innerText = "4820 ms";
+                document.getElementById('lbl-realtime-ping').style.color = "#ff3333";
+                document.getElementById('lbl-realtime-load').innerText = "142.8k rps";
+                document.getElementById('lbl-realtime-load').style.color = "#ff3333";
+                startDdosLogs();
+            } else {
+                document.body.classList.remove('ddos-lagging');
+                document.getElementById('ddos-site-warning').style.display = 'none';
+                document.getElementById('ddos-overlay').style.display = 'none';
+                document.getElementById('lbl-realtime-ping').innerText = "28 ms";
+                document.getElementById('lbl-realtime-ping').style.color = "var(--accent-green)";
+                document.getElementById('lbl-realtime-load').innerText = "4 rps";
+                document.getElementById('lbl-realtime-load').style.color = "var(--accent-green)";
+                clearInterval(ddosInterval);
+            }
+
+            if (data.abuse?.party) {
+                document.body.style.animation = "interfaceLag 0.05s infinite alternate";
+                document.body.style.filter = "hue-rotate(120deg) contrast(1.3)";
+            } else if (!data.abuse?.ddos) {
+                document.body.style.animation = "none";
+                document.body.style.filter = "none";
+            }
+
+            updateAbuseButtonsUI(data.abuse);
+        });
+
+        function startDdosLogs() {
+            if(ddosInterval) clearInterval(ddosInterval);
+            const container = document.getElementById('ddos-log-container');
+            const ips = ["194.226.43.11", "45.138.5.192", "88.201.15.4", "178.90.201.44"];
+            const methods = ["GET /index.html HTTP/1.1", "POST /api/v3/status HTTP/1.1"];
+            
+            ddosInterval = setInterval(() => {
+                document.getElementById('ddos-clock').innerText = new Date().toLocaleTimeString();
+                const randomIp = ips[Math.floor(Math.random() * ips.length)];
+                const randomMethod = methods[Math.floor(Math.random() * methods.length)];
+                container.innerHTML += `<div>[ATTACK] ${randomIp} -> OVERLOAD: ${randomMethod}</div>`;
+                if(container.childNodes.length > 25) container.removeChild(container.firstChild);
+                container.scrollTop = container.scrollHeight;
+            }, 120);
+        }
+
+        function startCountdown(targetDate) {
+            const target = new Date(targetDate).getTime();
+            timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const diff = target - now;
+                if (diff <= 0) {
+                    document.getElementById('timer-container').innerText = "00:00:00:00";
+                    clearInterval(timerInterval);
+                    return;
+                }
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                const secs = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+                document.getElementById('timer-container').innerText = `${days}:${hours}:${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function updateAbuseButtonsUI(abuse) {
+            setBtnState('btn-screamer', abuse?.screamer);
+            setBtnState('btn-404', abuse?.error404);
+            setBtnState('btn-ddos', abuse?.ddos);
+            setBtnState('btn-504', abuse?.error504);
+            setBtnState('btn-glitch', abuse?.glitch);
+            setBtnState('btn-ban', abuse?.banActive);
+            
+            const partyBtn = document.getElementById('btn-party-hard');
+            if (abuse?.party) partyBtn.classList.add('active');
+            else partyBtn.classList.remove('active');
+        }
+
+        function setBtnState(id, isActive) {
+            const btn = document.getElementById(id);
+            if (isActive) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+
+        document.getElementById('rng-sfm').addEventListener('input', (e) => document.getElementById('lbl-sfm').innerText = e.target.value + '%');
+        document.getElementById('rng-vfx').addEventListener('input', (e) => document.getElementById('lbl-vfx').innerText = e.target.value + '%');
+
+        setupAbuseToggle('btn-screamer');
+        setupAbuseToggle('btn-404');
+        setupAbuseToggle('btn-ddos');
+        setupAbuseToggle('btn-504');
+        setupAbuseToggle('btn-glitch');
+        setupAbuseToggle('btn-ban');
+        setupAbuseToggle('btn-party-hard');
+
+        function setupAbuseToggle(id) {
+            document.getElementById(id).addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        }
+
+        function updateFirebaseData() {
+            db.ref('siteData').update({
+                sfm: parseInt(document.getElementById('rng-sfm').value),
+                vfx: parseInt(document.getElementById('rng-vfx').value),
+                showTimer: document.getElementById('chk-show-timer').checked,
+                timerDate: document.getElementById('txt-timer-date').value,
+                customTitle: document.getElementById('txt-custom-title').value,
+                fanMessage: document.getElementById('txt-fan-message').value,
+                urgentMessageActive: document.getElementById('chk-urgent-msg').checked,
+                onlineCount: document.getElementById('txt-online-count').value,
+                showOnline: document.getElementById('chk-show-online').checked,
+                authorStatus: document.getElementById('sel-author-status').value,
+                currentTrack: document.getElementById('txt-phonk-track').value,
+                maintenanceActive: document.getElementById('chk-maintenance').checked,
+                abuse: {
+                    screamer: document.getElementById('btn-screamer').classList.contains('active'),
+                    error404: document.getElementById('btn-404').classList.contains('active'),
+                    ddos: document.getElementById('btn-ddos').classList.contains('active'),
+                    error504: document.getElementById('btn-504').classList.contains('active'),
+                    glitch: document.getElementById('btn-glitch').classList.contains('active'),
+                    banActive: document.getElementById('btn-ban').classList.contains('active'),
+                    party: document.getElementById('btn-party-hard').classList.contains('active')
+                }
+            }).then(() => alert("Данные хаба успешно обновлены!"));
+        }
+    </script>
+</body>
+</html>
