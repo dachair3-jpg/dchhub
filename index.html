@@ -106,8 +106,8 @@
         #phonk-player-status { font-size: 0.65rem; color: #444; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-top: 15px; text-align: center; width: 100%; }
         #phonk-player-status span { color: #00ffea; }
 
-        /* 👑 Сверхнадежная Админ-Панель V3 (Никогда не перекрывается оверлеями) */
-        #admin-panel-v3 { position: fixed; bottom: 20px; left: 20px; width: 250px; background: rgba(0,0,0,0.98); border: 1px solid var(--accent-green); padding: 12px; z-index: 999999999 !important; box-shadow: 0 0 25px rgba(0, 255, 110, 0.35); }
+        /* 👑 Сверхнадежная Админ-Панель V3 (Скрыта по умолчанию) */
+        #admin-panel-v3 { position: fixed; bottom: 20px; left: 20px; width: 250px; background: rgba(0,0,0,0.98); border: 1px solid var(--accent-green); padding: 12px; z-index: 999999999 !important; box-shadow: 0 0 25px rgba(0, 255, 110, 0.35); display: none; }
         .panel-title { color: var(--accent-green); font-size: 0.65rem; font-weight: 900; text-align: center; margin-bottom: 10px; letter-spacing: 1.5px; text-shadow: 0 0 5px var(--accent-glow); }
         .admin-row { margin-bottom: 7px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .admin-row input[type="checkbox"] { accent-color: var(--accent-green); }
@@ -119,13 +119,22 @@
         .admin-select { width: 100%; background: #0a0a0a; border: 1px solid #1a1a1a; color: var(--accent-green); font-size: 0.65rem; padding: 4px; margin-bottom: 6px; outline: none; font-weight: bold; text-transform: uppercase; }
         
         /* Кнопки режимов */
-        .abuse-title { color: #ff3333; font-size: 0.6rem; font-weight: 900; text-align: center; margin: 8px 0 5px 0; letter-spacing: 1px; }
+        .abuse-title { color: #ff3333; font-size: 0.6 micro; font-weight: 900; text-align: center; margin: 8px 0 5px 0; letter-spacing: 1px; }
         .abuse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
         .btn-abuse { background: #050505; border: 1px solid #151515; color: #ff3333; font-size: 0.55rem; font-weight: 900; padding: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .btn-abuse.active { background: #ff3333; color: #000; border-color: #ff3333; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
         .btn-party { background: #050505; border: 1px solid #151515; color: #00ffea; font-size: 0.55rem; font-weight: 900; padding: 6px; width: 100%; cursor: pointer; text-transform: uppercase; transition: all 0.2s; margin-bottom: 4px; }
         .btn-party.active { background: #00ffea; color: #000; border-color: #00ffea; }
         .btn-save-v3 { background: var(--accent-green); color: #000; font-size: 0.65rem; font-weight: 900; border: none; width: 100%; padding: 7px; cursor: pointer; text-transform: uppercase; margin-top: 5px; }
+
+        /* 🔒 Секретное окно логина */
+        #admin-auth-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 1000000000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); display: none; }
+        .auth-box { background: #050505; border: 1px solid var(--accent-green); padding: 25px; width: 300px; text-align: center; box-shadow: 0 0 30px rgba(0,255,110,0.2); }
+        .auth-box h3 { font-size: 0.9rem; font-weight: 900; letter-spacing: 1px; color: var(--accent-green); margin-bottom: 15px; text-transform: uppercase; }
+        .auth-box input { width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: #fff; text-align: center; font-size: 1rem; letter-spacing: 3px; outline: none; margin-bottom: 15px; }
+        .auth-box input:focus { border-color: var(--accent-green); }
+        .auth-box button { background: #fff; color: #000; border: none; padding: 10px; width: 100%; font-weight: 900; text-transform: uppercase; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+        .auth-box button:hover { background: var(--accent-green); box-shadow: 0 0 15px var(--accent-glow); }
 
         /* Экраны блокировок / Заглушки */
         #screamer-element { position: fixed; top:0; left:0; width:100vw; height:100vh; background: url('https://i.imgur.com/8Nf9XmB.jpg') center/cover no-repeat; z-index: 9999999; display: none; }
@@ -135,7 +144,6 @@
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px rgba(255,51,51,0.2); opacity: 1; } 50% { box-shadow: 0 0 15px rgba(255,51,51,0.6); opacity: 0.6; } }
         .footer-text { text-align: center; color: #161616; font-size: 0.65rem; font-weight: 700; padding: 50px 0; letter-spacing: 1px; }
 
-        /* Адаптивность под мобильные устройства сайта */
         @media (max-width: 900px) {
             .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 30px; text-align: center; }
             .hero-text h1 { font-size: 2.3rem; }
@@ -150,7 +158,14 @@
 </head>
 <body>
 
-    <!-- Системные Наложения (Overlays) -->
+    <div id="admin-auth-modal">
+        <div class="auth-box">
+            <h3>Вход в Dachair Panel</h3>
+            <input type="password" id="auth-password-field" placeholder="••••">
+            <button onclick="checkAdminPassword()">Войти</button>
+        </div>
+    </div>
+
     <div id="ddos-site-warning">⚠️ ВНИМАНИЕ: ОБНАРУЖЕНА КРИТИЧЕСКАЯ СЕТЕВАЯ АТАКА (DDOS). ФИЛЬТРАЦИЯ ТРАФИКА...</div>
     <div id="screamer-element"></div>
     <div id="fake-404"><h1>404 Not Found</h1><hr><p>nginx/1.18.0 (Ubuntu)</p></div>
@@ -164,7 +179,6 @@
         <p style="color:#aaa; font-size:13px; max-width:500px; line-height:1.6;">Ваш сетевой узел был заблокирован администратором Dachair?! Production за подозрительную активность и попытку инъекции скриптов.</p>
     </div>
 
-    <!-- Монитор логов DDoS атаки -->
     <div id="ddos-overlay">
         <div class="ddos-header">
             <span>🛡️ TRAFFIC_SHIELD.EXE [ACTIVE]</span>
@@ -202,11 +216,10 @@
             </div>
         </div>
 
-        <!-- Модуль Анонсов и Срочных Уведомлений -->
         <div class="announcement-box" id="main-announcement-zone">
             <div id="badge-element" class="badge">Coming Soon</div>
             <h2 id="announcement-title">Awaiting Announcement</h2>
-            <p id="announcement-desc">The release timer is temporarily hidden. Production is in the storyboarding stage. Precise countdown coming soon!</p>
+            <p id="announcement-desc">The release timer is temporarily hidden. Precise countdown coming soon!</p>
             <div id="timer-container" class="countdown-display" style="display: none;">00:00:00:00</div>
             
             <div class="online-counter-badge" id="lbl-online-counter">🔥 1,240 animators online</div>
@@ -242,7 +255,6 @@
         <div id="phonk-player-status">NOW STREAMING: <span id="lbl-current-track">PHONK MANIA VOL.1 (SLOWED)</span></div>
     </section>
 
-    <!-- 🛠️ ПОЛНАЯ АДМИН-ПАНЕЛЬ V3 -->
     <div id="admin-panel-v3">
         <div class="panel-title">DACHAIR PANEL V3</div>
         
@@ -305,7 +317,6 @@
 
     <div class="footer-text">© 2026 DACHAIR?! PRODUCTION. ALL RIGHTS RESERVED.</div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
@@ -316,6 +327,46 @@
 
         let timerInterval = null;
         let ddosInterval = null;
+        let isAdminAuthorized = false; // Флаг авторизации
+
+        // 🎛️ ХОТКЕЙ: Вызов окна авторизации при нажатии Ctrl + Shift + A
+        window.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
+                e.preventDefault();
+                const authModal = document.getElementById('admin-auth-modal');
+                const adminPanel = document.getElementById('admin-panel-v3');
+                
+                if (isAdminAuthorized) {
+                    // Если уже вошли, то просто скрываем/показываем панель управления
+                    adminPanel.style.display = (adminPanel.style.display === 'block') ? 'none' : 'block';
+                } else {
+                    // Если не вошли, открываем секретное модальное окно
+                    authModal.style.display = 'flex';
+                    document.getElementById('auth-password-field').focus();
+                }
+            }
+        });
+
+        // 🔑 Функция проверки секретного пароля
+        function checkAdminPassword() {
+            const enteredPassword = document.getElementById('auth-password-field').value;
+            const SECRET_PASSWORD = "1234"; // СЮДА МОЖНО ВПИСАТЬ ЛЮБОЙ СВОЙ ПАРОЛЬ
+
+            if (enteredPassword === SECRET_PASSWORD) {
+                isAdminAuthorized = true;
+                document.getElementById('admin-auth-modal').style.display = 'none';
+                document.getElementById('admin-panel-v3').style.display = 'block';
+                alert("Доступ разрешен. Панель администратора разблокирована.");
+            } else {
+                alert("Неверный пароль доступа!");
+                document.getElementById('auth-password-field').value = "";
+            }
+        }
+
+        // Позволяет отправлять пароль по нажатию клавиши Enter
+        document.getElementById('auth-password-field').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkAdminPassword();
+        });
 
         db.ref('siteData').on('value', (snapshot) => {
             const data = snapshot.val();
@@ -484,6 +535,7 @@
 
         function setBtnState(id, isActive) {
             const btn = document.getElementById(id);
+            if (!btn) return;
             if (isActive) btn.classList.add('active');
             else btn.classList.remove('active');
         }
@@ -500,7 +552,9 @@
         setupAbuseToggle('btn-party-hard');
 
         function setupAbuseToggle(id) {
-            document.getElementById(id).addEventListener('click', function() {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            btn.addEventListener('click', function() {
                 this.classList.toggle('active');
             });
         }
