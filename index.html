@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     
-    <style>
+    <style id="main-styles">
         :root {
             --accent-green: #00ff6e;
             --accent-glow: rgba(0, 255, 110, 0.25);
@@ -20,15 +20,43 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--dark-bg); color: #ffffff; overflow-x: hidden; transition: background 0.5s ease, filter 0.3s ease; }
 
-        /* Glitch / Panic Effect */
+        /* 👑 CHAOS ABUSE CSS CLASSES */
+        html.flip-active { transform: rotate(180deg); filter: invert(1); transform-origin: center center; transition: all 0.3s ease; }
+        body.earthquake-active { animation: extremeEarthquake 0.08s infinite; }
+        body.fried-active { filter: saturate(9) contrast(4) brightness(1.3) !important; }
+        body.ghost-active * { color: rgba(255,255,255,0.02) !important; border-color: rgba(0,255,110,0.3) !important; background-image: none !important; }
+        body.ghost-active #admin-panel-v3 *, body.ghost-active #admin-auth-modal * { color: #fff !important; }
+        body.ghost-active #admin-panel-v3 .panel-title { color: var(--accent-green) !important; }
+        
+        body.lowfps-active { animation: lowFpsAnim 0.4s steps(2) infinite; }
+        @keyframes lowFpsAnim { from { filter: blur(0px); } to { filter: blur(0.1px); } }
+
+        .gravity-active nav, .gravity-active header, .gravity-active section, .gravity-active .logo-area {
+            animation: zeroGravityFloat 5s infinite ease-in-out alternate;
+        }
+
+        @keyframes zeroGravityFloat {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(0.5deg); }
+            100% { transform: translateY(10px) rotate(-0.5deg); }
+        }
+        
+        @keyframes extremeEarthquake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-8px, 6px) rotate(-0.5deg); }
+            40% { transform: translate(7px, -7px) rotate(0.5deg); }
+            60% { transform: translate(-6px, -5px) rotate(0deg); }
+            80% { transform: translate(6px, 7px) rotate(0.5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
         .glitch-active { animation: glitchSkew 2s infinite linear alternate-reverse; filter: hue-rotate(10deg) contrast(1.2); }
         @keyframes glitchSkew { 
             0%, 100% { transform: skewX(0deg); text-shadow: none; } 
-            20 { transform: skewX(-0.5deg); text-shadow: 1px 0 #ff00ff, -1px 0 #00ffff; }
+            20% { transform: skewX(-0.5deg); text-shadow: 1px 0 #ff00ff, -1px 0 #00ffff; }
             40% { transform: skewX(0.5deg); text-shadow: -1px 0 #ff0000, 1px 0 #00ff00; }
         }
 
-        /* DDoS Lagging Effect */
         .ddos-lagging { animation: interfaceLag 1.5s infinite steps(1), screenGlitch 0.8s infinite alternate ease-in-out; cursor: wait !important; }
         @keyframes interfaceLag { 0%, 20%, 60%, 100% { opacity: 1; filter: blur(0); } 10% { opacity: 0.8; filter: blur(0.5px); } }
         @keyframes screenGlitch { 0% { border-color: var(--border-color); } 50% { border-color: #ff3333; } }
@@ -38,12 +66,35 @@
         .ddos-header { background: #1a0202; color: #ff3333; padding: 10px; font-size: 11px; font-weight: bold; border-bottom: 1px solid #ff3333; display: flex; justify-content: space-between; }
         .ddos-logs { padding: 10px; font-size: 10px; height: 140px; overflow-y: auto; color: #ff9999; line-height: 1.4; }
 
+        /* Overlays & Watermarks CSS */
+        #watermarks-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999997; pointer-events: none; display: none; }
+        .wm-classic { position: absolute; color: rgba(255, 255, 255, 0.4); font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; padding: 5px; }
+        
+        #vhs-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 6px 100%; z-index: 999994; pointer-events: none; display: none; }
+        #vhs-indicator { position: absolute; top: 30px; left: 40px; color: #00ff00; font-family: monospace; font-size: 20px; font-weight: bold; letter-spacing: 1px; animation: vhsBlink 1s infinite steps(2); }
+        @keyframes vhsBlink { to { opacity: 0; } }
+
+        #cinematic-top { position: fixed; top: 0; left: 0; width: 100vw; height: 0vh; background: #000; z-index: 999995; transition: height 0.5s ease; pointer-events: none; }
+        #cinematic-bottom { position: fixed; bottom: 0; left: 0; width: 100vw; height: 0vh; background: #000; z-index: 999995; transition: height 0.5s ease; pointer-events: none; }
+
+        #captcha-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: #111; border: 2px solid #ff3333; padding: 25px; z-index: 1000000005; display: none; text-align: center; box-shadow: 0 0 40px #ff3333; }
+
+        /* 👑 NEW INTERACTIVE OVERLAYS FOR ANNOUNCEMENT & FAKE DOX */
+        #mega-announcement-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.96); z-index: 1000000010; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .mega-box { background: #0a0a0a; border: 3px solid #ff3333; padding: 40px; text-align: center; max-width: 600px; width: 100%; box-shadow: 0 0 35px rgba(255, 51, 51, 0.6); animation: megaFlash 1.5s infinite alternate; }
+        .mega-box h1 { font-size: 1.8rem; color: #ff3333; margin-bottom: 20px; font-weight: 900; letter-spacing: 1px; }
+        .mega-box p { font-size: 1.1rem; line-height: 1.6; color: #fff; margin-bottom: 30px; font-weight: 600; white-space: pre-wrap; }
+        @keyframes megaFlash { from { border-color: #ff3333; box-shadow: 0 0 20px #ff3333; } to { border-color: var(--accent-green); box-shadow: 0 0 35px var(--accent-green); } }
+
+        #fake-dox-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 1000000020; display: none; justify-content: center; align-items: center; color: #fff; padding: 20px; }
+        .dox-box { background: #050505; border: 2px solid #ff3333; padding: 30px; width: 460px; max-width: 100%; text-align: center; box-shadow: 0 0 40px rgba(255,51,51,0.5); font-family: monospace; }
+
         /* Navigation */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 25px 5%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid #111; position: relative; z-index: 10; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 25px 5%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid #111; position: relative; z-index: 10; transition: transform 0.3s ease; }
         .logo-area { display: flex; flex-direction: column; }
         .logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; }
         .logo span { color: var(--accent-green); text-shadow: 0 0 10px var(--accent-glow); }
-        .author-status { font-size: 0.65rem; color: #555; text-transform: uppercase; font-weight: 900; margin-top: 2px; letter-spacing: 0.5px; transition: color 0.3s; }
+        .author-status { font-size: 0.65rem; color: #555; text-transform: uppercase; font-weight: 900; margin-top: 2px; letter-spacing: 0.5px; }
         .author-status span { color: var(--accent-green); }
 
         .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
@@ -54,32 +105,53 @@
         .lang-btn.active { background: var(--accent-green); color: #000; border-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-glow); }
 
         /* Hero Screen */
-        .hero { padding: 60px 5% 40px 5%; display: grid; grid-template-columns: 1.3fr 1fr; gap: 50px; align-items: center; min-height: 450px; }
+        .hero { padding: 60px 5% 40px 5%; display: grid; grid-template-columns: 1.3fr 1fr; gap: 50px; align-items: center; min-height: 450px; transition: transform 0.3s ease; }
         .hero-text h1 { font-size: 3.2rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; }
         .hero-text h1 span { color: var(--accent-green); text-shadow: 0 0 15px var(--accent-glow); }
         .hero-text p { color: var(--text-gray); font-size: 0.95rem; max-width: 500px; margin-bottom: 35px; line-height: 1.7; }
         .hero-btns { display: flex; gap: 15px; flex-wrap: wrap; }
         
-        .btn { padding: 14px 28px; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; display: inline-block; text-align: center; }
+        .btn { padding: 14px 28px; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; display: inline-block; text-align: center; position: relative; }
         .btn-primary { background: #fff; color: #000; }
         .btn-primary:hover { background: var(--accent-green); box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-2px); }
         .btn-secondary { background: transparent; color: #fff; border: 1px solid #fff; }
         .btn-secondary:hover { border-color: var(--accent-green); color: var(--accent-green); box-shadow: 0 0 15px rgba(0,255,110,0.15); transform: translateY(-2px); }
 
         /* Announcement Box */
-        .announcement-box { border: 1px dashed var(--accent-green); background: rgba(0, 255, 110, 0.01); padding: 40px; text-align: center; position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: inset 0 0 20px rgba(0,0,0,0.6); }
-        .announcement-box.urgent-mode { border: 1px dashed #ff3333; background: rgba(255, 51, 51, 0.02); box-shadow: 0 0 25px rgba(255, 51, 51, 0.05); }
+        .announcement-box { border: 1px dashed var(--accent-green); background: rgba(0, 255, 110, 0.01); padding: 40px; text-align: center; position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: inset 0 0 20px rgba(0,0,0,0.6); }
+        .announcement-box.urgent-mode { border: 1px dashed #ff3333; background: rgba(255, 51, 51, 0.03); animation: urgentPulseGlow 2s infinite alternate; }
         
-        .badge { background: #111; border: 1px solid #222; color: var(--accent-green); font-size: 0.65rem; font-weight: 900; padding: 4px 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 15px; transition: all 0.3s ease; }
+        .effect-shake { animation: superShake 0.4s ease-in-out; }
+        .effect-flash-green { animation: flashGreen 0.6s ease-out; }
+        .effect-flash-red { animation: flashRed 0.6s ease-out; }
+
+        @keyframes urgentPulseGlow {
+            0% { box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 0 5px rgba(255,51,51,0.2); }
+            100% { box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 0 25px rgba(255,51,51,0.6); border-color: #ff5555; }
+        }
+        @keyframes superShake {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            20% { transform: translateX(-8px) translateY(-2px); }
+            40% { transform: translateX(6px) translateY(4px); }
+            60% { transform: translateX(-6px) translateY(-4px); }
+            80% { transform: translateX(4px) translateY(2px); }
+        }
+        @keyframes flashGreen {
+            0% { background: rgba(0, 255, 110, 0.4); box-shadow: 0 0 40px var(--accent-green); }
+            100% { background: rgba(0, 255, 110, 0.01); }
+        }
+        @keyframes flashRed {
+            0% { background: rgba(255, 51, 51, 0.5); box-shadow: 0 0 50px #ff3333; }
+            100% { background: rgba(255, 51, 51, 0.03); }
+        }
+
+        .badge { background: #111; border: 1px solid #222; color: var(--accent-green); font-size: 0.65rem; font-weight: 900; padding: 4px 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 15px; }
         .badge.urgent { color: #ff3333; border-color: #ff3333; animation: pulse-glow 1.5s infinite; }
         
         .announcement-box h2 { font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
         .announcement-box p { color: var(--text-gray); font-size: 0.8rem; max-width: 340px; line-height: 1.6; }
         
-        /* Live Online Counter */
         .online-counter-badge { background: rgba(0, 255, 234, 0.07); border: 1px solid #00ffea; color: #00ffea; font-size: 10px; font-weight: 900; padding: 3px 10px; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: none; }
-
-        /* Typing Loader */
         .typing-loader { display: inline-flex; gap: 2px; margin-left: 5px; vertical-align: middle; }
         .typing-loader span { width: 3px; height: 3px; background-color: #ff3333; border-radius: 50%; animation: dota 1.4s infinite; opacity: 0.3; }
         .typing-loader span:nth-child(2) { animation-delay: 0.2s; }
@@ -91,7 +163,7 @@
         .countdown-display { font-size: 2rem; font-weight: 900; color: var(--accent-green); font-family: monospace; letter-spacing: 2px; margin-top: 15px; text-shadow: 0 0 10px rgba(0,255,110,0.3); }
 
         /* Production Status */
-        .production-status { padding: 40px 5%; }
+        .production-status { padding: 40px 5%; transition: transform 0.3s ease; }
         .production-status h2 { font-size: 1.8rem; font-weight: 900; color: var(--accent-green); margin-bottom: 30px; text-shadow: 0 0 10px var(--accent-glow); }
         .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         .status-card { background: var(--card-bg); border: 1px solid #141414; padding: 30px; position: relative; transition: border-color 0.3s ease, transform 0.3s ease; }
@@ -106,8 +178,8 @@
         #phonk-player-status { font-size: 0.65rem; color: #444; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-top: 15px; text-align: center; width: 100%; }
         #phonk-player-status span { color: #00ffea; }
 
-        /* 🛠️ РУССКАЯ АДМИН-ПАНЕЛЬ V3 */
-        #admin-panel-v3 { position: fixed; bottom: 20px; left: 20px; width: 250px; background: rgba(0,0,0,0.98); border: 1px solid var(--accent-green); padding: 12px; z-index: 999999999 !important; box-shadow: 0 0 25px rgba(0, 255, 110, 0.35); display: none; }
+        /* 🛠️ РУССКАЯ АДМИН-ПАНЕЛЬ V3 (EXTENDED) */
+        #admin-panel-v3 { position: fixed; bottom: 20px; left: 20px; width: 280px; background: rgba(0,0,0,0.98); border: 1px solid var(--accent-green); padding: 12px; z-index: 999999999 !important; box-shadow: 0 0 25px rgba(0, 255, 110, 0.35); display: none; max-height: 85vh; overflow-y: auto; scrollbar-width: thin; }
         .panel-title { color: var(--accent-green); font-size: 0.65rem; font-weight: 900; text-align: center; margin-bottom: 10px; letter-spacing: 1.5px; text-shadow: 0 0 5px var(--accent-glow); }
         .admin-row { margin-bottom: 7px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .admin-row input[type="checkbox"] { accent-color: var(--accent-green); }
@@ -120,9 +192,9 @@
         
         .abuse-title { color: #ff3333; font-size: 0.6rem; font-weight: 900; text-align: center; margin: 8px 0 5px 0; letter-spacing: 1px; }
         .abuse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
-        .btn-abuse { background: #050505; border: 1px solid #151515; color: #ff3333; font-size: 0.55rem; font-weight: 900; padding: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-abuse { background: #050505; border: 1px solid #151515; color: #ff3333; font-size: 0.55rem; font-weight: 900; padding: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; text-align: center; }
         .btn-abuse.active { background: #ff3333; color: #000; border-color: #ff3333; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
-        .btn-party { background: #050505; border: 1px solid #151515; color: #00ffea; font-size: 0.55rem; font-weight: 900; padding: 6px; width: 100%; cursor: pointer; text-transform: uppercase; transition: all 0.2s; margin-bottom: 4px; }
+        .btn-party { background: #050505; border: 1px solid #151515; color: #00ffea; font-size: 0.55rem; font-weight: 900; padding: 6px; width: 100%; cursor: pointer; text-transform: uppercase; transition: all 0.2s; margin-bottom: 4px; text-align: center; }
         .btn-party.active { background: #00ffea; color: #000; border-color: #00ffea; }
         .btn-save-v3 { background: var(--accent-green); color: #000; font-size: 0.65rem; font-weight: 900; border: none; width: 100%; padding: 7px; cursor: pointer; text-transform: uppercase; margin-top: 5px; }
 
@@ -131,14 +203,24 @@
         .auth-box { background: #050505; border: 1px solid var(--accent-green); padding: 25px; width: 300px; text-align: center; box-shadow: 0 0 30px rgba(0,255,110,0.2); }
         .auth-box h3 { font-size: 0.9rem; font-weight: 900; letter-spacing: 1px; color: var(--accent-green); margin-bottom: 15px; text-transform: uppercase; }
         .auth-box input { width: 100%; background: #000; border: 1px solid #222; padding: 10px; color: #fff; text-align: center; font-size: 1rem; letter-spacing: 3px; outline: none; margin-bottom: 15px; }
-        .auth-box input:focus { border-color: var(--accent-green); }
-        .auth-box button { background: #fff; color: #000; border: none; padding: 10px; width: 100%; font-weight: 900; text-transform: uppercase; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
-        .auth-box button:hover { background: var(--accent-green); box-shadow: 0 0 15px var(--accent-glow); }
+        .auth-box button { background: #fff; color: #000; border: none; padding: 10px; width: 100%; font-weight: 900; text-transform: uppercase; font-size: 0.75rem; cursor: pointer; }
 
-        /* Error Blocks / Overlays */
+        /* Overlays nodes */
         #screamer-element { position: fixed; top:0; left:0; width:100vw; height:100vh; background: url('https://i.imgur.com/8Nf9XmB.jpg') center/cover no-repeat; z-index: 9999999; display: none; }
         #fake-404, #fake-504, #maintenance-block, #ban-block { position: fixed; top:0; left:0; width:100vw; height:100vh; background: #000; color: #fff; z-index: 999999; display: none; padding: 50px; font-family: monospace; }
         #maintenance-block, #ban-block { text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+        #fake-bsod { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#0078d7; color:#fff; font-family:'Segoe UI', Tahoma, sans-serif; padding:10%; z-index: 99999999; display: none; user-select: none; }
+        #matrix-override { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; color:#00ff33; font-family:monospace; padding:30px; z-index: 999998; display: none; overflow:hidden; font-size:13px; line-height:1.6; }
+
+        #error-cascade-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index: 999996; display: none; pointer-events: none; }
+        .retro-error-box { position: absolute; width: 320px; background: #cbd2d5; border: 2px solid #fff; border-right-color: #7f7f7f; border-bottom-color: #7f7f7f; box-shadow: 1px 1px 10px rgba(0,0,0,0.5); font-family: Tahoma, sans-serif; pointer-events: auto; }
+        .retro-title { background: linear-gradient(90deg, #000080, #1084d0); color: white; font-weight: bold; font-size: 12px; padding: 4px 6px; display: flex; justify-content: space-between; }
+        .retro-body { padding: 15px; color: #000; font-size: 12px; }
+        .retro-btn { display: block; margin: 10px auto 0 auto; background: #cbd2d5; border: 1px solid #fff; border-right-color: #000; border-bottom-color: #000; padding: 4px 15px; font-size: 11px; cursor: pointer; font-weight: bold; }
+
+        .floating-meme-text { position: fixed; color: #ff00ff; font-weight: 900; font-size: 24px; z-index: 999993; text-transform: uppercase; text-shadow: 0 0 10px #000; pointer-events: none; animation: memeFloatOut 2s forwards linear; }
+        @keyframes memeFloatOut { from { transform: translateY(0) scale(1); opacity: 1; } to { transform: translateY(-100px) scale(1.5); opacity: 0; } }
 
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px rgba(255,51,51,0.2); opacity: 1; } 50% { box-shadow: 0 0 15px rgba(255,51,51,0.6); opacity: 0.6; } }
         .footer-text { text-align: center; color: #161616; font-size: 0.65rem; font-weight: 700; padding: 50px 0; letter-spacing: 1px; }
@@ -150,14 +232,12 @@
             .hero-btns { justify-content: center; }
             .status-grid { grid-template-columns: 1fr; }
             nav { flex-direction: column; gap: 15px; padding: 15px; }
-            .nav-links { gap: 15px; font-size: 0.75rem; }
-            #admin-panel-v3 { width: calc(100% - 40px); bottom: 10px; left: 20px; max-height: 250px; overflow-y: auto; }
+            #admin-panel-v3 { width: calc(100% - 40px); bottom: 10px; left: 20px; max-height: 280px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Admin Authentication Modal -->
     <div id="admin-auth-modal">
         <div class="auth-box">
             <h3>Dachair Panel Login</h3>
@@ -166,21 +246,60 @@
         </div>
     </div>
 
-    <!-- System Overlays -->
     <div id="ddos-site-warning">⚠️ WARNING: CRITICAL MALICIOUS DDoS ATTACK DETECTED. FILTERING TRAFFIC...</div>
     <div id="screamer-element"></div>
     <div id="fake-404"><h1>404 Not Found</h1><hr><p>nginx/1.18.0 (Ubuntu)</p></div>
     <div id="fake-504"><h1>504 Gateway Time-out</h1><hr><p>nginx</p></div>
+    
+    <div id="fake-bsod">
+        <div style="font-size: 7rem; margin-bottom: 15px;">:(</div>
+        <h1 style="font-size: 1.7rem; font-weight: 300; margin-bottom: 25px; line-height: 1.4;">Your platform ran into a critical script error and needs to crash. We're just gathering database diagnostic logs.</h1>
+        <div style="font-size: 1.1rem; font-weight: 300; margin-bottom: 35px;">0% complete</div>
+        <div style="font-size: 0.85rem; opacity: 0.8;">Stop code: CRITICAL_DACHAIR_OVERLOAD</div>
+    </div>
+
+    <div id="matrix-override"><div id="matrix-log-container"></div></div>
+    <div id="error-cascade-overlay"></div>
+
+    <div id="watermarks-overlay"></div>
+    <div id="vhs-overlay"><div id="vhs-indicator">● PLAY</div></div>
+    <div id="cinematic-top"></div>
+    <div id="cinematic-bottom"></div>
+    
+    <div id="captcha-box">
+        <h2 style="color:#ff3333; font-size:16px; margin-bottom:15px; text-transform:uppercase;">🚨 Verification Loop</h2>
+        <p style="color:#fff; font-size:12px; margin-bottom:15px;" id="captcha-text">Вы точно Скибидист, а не Камерамен?</p>
+        <button class="btn btn-primary" style="padding:8px 15px; font-size:11px; margin-bottom:5px; width:100%;" onclick="loopCaptcha()">ДА, ТУАЛЕТ!</button>
+        <button class="btn btn-secondary" style="padding:8px 15px; font-size:11px; width:100%;" onclick="loopCaptcha()">НЕТ, Я АНИМАТОР</button>
+    </div>
+
+    <div id="mega-announcement-overlay">
+        <div class="mega-box">
+            <h1>🚨🚨🚨 ВАЖНОЕ ОБЪЯВЛЕНИЕ / MEGA ANNOUNCEMENT 🚨🚨🚨</h1>
+            <p id="lbl-mega-text">Загрузка секретных файлов...</p>
+            <button class="btn btn-primary" style="width:100%;" onclick="document.getElementById('mega-announcement-overlay').style.display='none'">ПРИНЯТО К СВЕДЕНИЮ 👑</button>
+        </div>
+    </div>
+
+    <div id="fake-dox-overlay">
+        <div class="dox-box">
+            <h2 style="color:#ff3333; font-size:14px; margin-bottom:15px; letter-spacing:1px;">⚠️ PROTOCOL: FAKE_SWAT_OVERRIDE.EXE ⚠️</h2>
+            <div id="dox-loading-status" style="font-size:12px; line-height:1.5; min-height:40px;"></div>
+            <div id="dox-data-results" style="display:none; text-align:left; font-size:11px; line-height:1.6; margin-top:15px; background:#000; padding:15px; border:1px dashed #ff3333; color:#00ff6e;">
+            </div>
+            <button class="btn btn-secondary" id="btn-close-dox" style="display:none; margin-top:15px; width:100%; padding:10px; font-size:10px;" onclick="document.getElementById('fake-dox-overlay').style.display='none'">ЗАКРЫТЬ УГРОЗУ</button>
+        </div>
+    </div>
+
     <div id="maintenance-block">
         <h1 style="color:var(--accent-green); margin-bottom:15px;">SERVER UNDER MAINTENANCE</h1>
-        <p style="color:#aaa; font-size:14px; max-width:400px;">The administrator has temporarily restricted access to the hub for emergency database and platform updates.</p>
+        <p style="color:#aaa; font-size:14px; max-width:400px;">The administrator has temporarily restricted access to the hub for emergency updates.</p>
     </div>
     <div id="ban-block">
         <h1 style="color:#ff3333; margin-bottom:15px;">🛑 ACCESS DENIED / YOU ARE BANNED</h1>
-        <p style="color:#aaa; font-size:13px; max-width:500px; line-height:1.6;">Your network node has been permanently blacklisted by Dachair?! Production for suspicious activity and unauthorized script injection attempts.</p>
+        <p style="color:#aaa; font-size:13px; max-width:500px;">Your network node has been permanently blacklisted by Dachair?! Production.</p>
     </div>
 
-    <!-- DDoS Logs Monitor -->
     <div id="ddos-overlay">
         <div class="ddos-header">
             <span>🛡️ TRAFFIC_SHIELD.EXE [ACTIVE]</span>
@@ -257,7 +376,6 @@
         <div id="phonk-player-status">NOW STREAMING: <span id="lbl-current-track">PHONK MANIA VOL.1 (SLOWED)</span></div>
     </section>
 
-    <!-- 🛠️ РУССКАЯ АДМИН-ПАНЕЛЬ V3 -->
     <div id="admin-panel-v3">
         <div class="panel-title">DACHAIR PANEL V3</div>
         
@@ -285,7 +403,7 @@
             <span style="color: #ff3333;">Ожидаем срочное сообщение</span>
         </label>
 
-        <input type="text" id="txt-online-count" class="admin-input-text" placeholder="Сколько онлайна показать? (напр. 5,230)">
+        <input type="text" id="txt-online-count" class="admin-input-text" placeholder="Сколько онлайна показать?">
         <label class="admin-row">
             <input type="checkbox" id="chk-show-online">
             <span style="color: #00ffea;">Показывать счетчик онлайна</span>
@@ -304,14 +422,40 @@
             <span style="color: #00ffea;">Технические работы (Lock)</span>
         </label>
 
+        <div class="abuse-title" style="color:#00ff6e;">🔥 ФИНАЛЬНЫЙ СВЕРХ-АННОНС 🔥</div>
+        <input type="text" id="txt-mega-msg" class="admin-input-text" placeholder="Текст Важнейшего Мега-Анонса...">
+        <button class="btn-abuse" id="btn-trigger-mega" style="color:#fff; width:100%; margin-bottom:6px; background:#0c2511;">Мега Окно Анонса</button>
+
+        <input type="text" id="txt-dox-target" class="admin-input-text" placeholder="Имя жертвы для фейк-докса...">
+        <button class="btn-abuse" id="btn-trigger-dox" style="color:#ff3333; width:100%; margin-bottom:6px; background:#2c0c0c;">Запустить Фейк-Докс</button>
+
         <div class="abuse-title">⚡ АДМИН АБЬЮЗ РЕЖИМЫ ⚡</div>
         <div class="abuse-grid">
             <button class="btn-abuse" id="btn-screamer">Скример</button>
             <button class="btn-abuse" id="btn-404">Фейк 404</button>
             <button class="btn-abuse" id="btn-ddos">Фейк ДДОС</button>
             <button class="btn-abuse" id="btn-504">Отвалить (504)</button>
-            <button class="btn-abuse" id="btn-glitch" style="color:#ff00ff;">Глитч/Паника</button>
+            <button class="btn-abuse" id="btn-glitch" style="color:#ff00ff;">Глитч</button>
             <button class="btn-abuse" id="btn-ban" style="color:#ffaa00;">Бан гостя</button>
+            <button class="btn-abuse" id="btn-bsod" style="color:#0078d7;">BSOD</button>
+            <button class="btn-abuse" id="btn-matrix" style="color:#00ff33;">Матрица</button>
+            <button class="btn-abuse" id="btn-flip" style="color:#ffff00;">Переворот</button>
+            <button class="btn-abuse" id="btn-earthquake" style="color:#ff5500;">Тряска</button>
+            <button class="btn-abuse" id="btn-fried" style="color:#ff0055;">Deep Fried</button>
+            <button class="btn-abuse" id="btn-gravity" style="color:#00ffff;">Невесомость</button>
+            <button class="btn-abuse" id="btn-spam" style="color:#ffaa00;">Каскад Окон</button>
+            <button class="btn-abuse" id="btn-skibidi-text" style="color:#bc13fe;">Скибидизация</button>
+
+            <button class="btn-abuse" id="btn-watermark" style="color:#a8a8a8;">Водяные Знаки</button>
+            <button class="btn-abuse" id="btn-flee" style="color:#33ffaf;">Побег Кнопок</button>
+            <button class="btn-abuse" id="btn-vhs" style="color:#ffaa55;">VHS Помехи</button>
+            <button class="btn-abuse" id="btn-lowfps" style="color:#ff3333;">Лаги 3 FPS</button>
+            <button class="btn-abuse" id="btn-nocss" style="color:#ff0055;">Убить CSS</button>
+            <button class="btn-abuse" id="btn-cinematic" style="color:#ffffff;">Режим Кино</button>
+            <button class="btn-abuse" id="btn-captcha" style="color:#00ffea;">Капча-Петля</button>
+            <button class="btn-abuse" id="btn-ghost" style="color:#8855ff;">Инвиз Текста</button>
+            <button class="btn-abuse" id="btn-meme-popup" style="color:#ff00aa;">Мем Стенд</button>
+            <button class="btn-abuse" id="btn-audio-nuke" style="color:#ff3300;">Звук Атака</button>
         </div>
         <button class="btn-party" id="btn-party-hard">Дискотека (Party Hard)</button>
 
@@ -320,7 +464,6 @@
 
     <div class="footer-text">© 2026 DACHAIR?! PRODUCTION. ALL RIGHTS RESERVED.</div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
@@ -329,44 +472,168 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let timerInterval = null;
-        let ddosInterval = null;
+        let timerInterval = null, ddosInterval = null, matrixInterval = null, cascadeInterval = null;
+        let memeInterval = null, audioInterval = null;
         let isAdminAuthorized = false;
+        let originalTextNodes = [];
+        let audioCtx = null, audioOsc = null, audioGain = null;
+        
+        let localFakeDoxActive = false; // Предотвращает перезапуск анимации докса при каждом тике БД
 
-        // Hotkey trigger: Ctrl + Shift + A
+        function playSystemSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                if (type === 'urgent') {
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                }
+            } catch (e) {}
+        }
+
         window.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
                 e.preventDefault();
-                const authModal = document.getElementById('admin-auth-modal');
-                const adminPanel = document.getElementById('admin-panel-v3');
-                
                 if (isAdminAuthorized) {
-                    adminPanel.style.display = (adminPanel.style.display === 'block') ? 'none' : 'block';
+                    const p = document.getElementById('admin-panel-v3');
+                    p.style.display = (p.style.display === 'block') ? 'none' : 'block';
                 } else {
-                    authModal.style.display = 'flex';
+                    document.getElementById('admin-auth-modal').style.display = 'flex';
                     document.getElementById('auth-password-field').focus();
                 }
             }
         });
 
         function checkAdminPassword() {
-            const enteredPassword = document.getElementById('auth-password-field').value;
-            const SECRET_PASSWORD = "1234";
-
-            if (enteredPassword === SECRET_PASSWORD) {
+            if (document.getElementById('auth-password-field').value === "1234") {
                 isAdminAuthorized = true;
                 document.getElementById('admin-auth-modal').style.display = 'none';
                 document.getElementById('admin-panel-v3').style.display = 'block';
-                alert("Доступ разрешен. Панель администратора разблокирована.");
             } else {
-                alert("Неверный пароль доступа!");
-                document.getElementById('auth-password-field').value = "";
+                alert("Неверный пароль!");
             }
         }
 
-        document.getElementById('auth-password-field').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkAdminPassword();
-        });
+        function setupFleeingButtons(activate) {
+            const btns = document.querySelectorAll('.hero-btns .btn, nav .nav-links a');
+            btns.forEach(btn => {
+                if (!btn.handlerFlee) {
+                    btn.handlerFlee = function() {
+                        if (!document.getElementById('btn-flee').classList.contains('active')) return;
+                        btn.style.position = 'absolute';
+                        btn.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+                        btn.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+                    };
+                    btn.addEventListener('mouseenter', btn.handlerFlee);
+                }
+                if (!activate) { btn.style.position = ''; btn.style.left = ''; btn.style.top = ''; }
+            });
+        }
+
+        function loopCaptcha() {
+            const phrases = ["Вы точно человек?", "Ошибка рендера SFM. Вы робот?", "Запустить Скибиди-вирус?", "Точно продолжить?"];
+            document.getElementById('captcha-text').innerText = phrases[Math.floor(Math.random() * phrases.length)];
+        }
+
+        // 👑 СИМУЛЯЦИЯ ИНТЕРАКТИВНОГО ФЕЙК-ДОКСА / СВАТА КЛИЕНТА
+        function runFakeDoxSimulation(targetName) {
+            const overlay = document.getElementById('fake-dox-overlay');
+            const status = document.getElementById('dox-loading-status');
+            const results = document.getElementById('dox-data-results');
+            const closeBtn = document.getElementById('btn-close-dox');
+
+            overlay.style.display = 'flex';
+            status.style.display = 'block';
+            results.style.display = 'none';
+            closeBtn.style.display = 'none';
+
+            status.innerText = `🔍 Инициализация поиска узла глобальной сети для: ${targetName}...`;
+            playSystemSound('urgent');
+            
+            setTimeout(() => {
+                status.innerText = "📡 Сканирование спутников... [██████████] 100%\n🔑 Дешифровка провайдера...";
+                setTimeout(() => {
+                    status.innerText = "💻 Взлом домашнего роутера через уязвимость SFM Core Leak...";
+                    setTimeout(() => {
+                        status.style.display = 'none';
+                        
+                        const fakeIps = ["127.0.0.1 (Да-да, ты сам у себя)", "192.168.1.5", "255.255.255.255 (Конец Интернета)"];
+                        const fakeLocations = ["Секретная комната за шкафом", "Бункер Скибиди-титанов, этаж 2", "Кухня, возле холодильника с сосисками"];
+                        const fakeProviders = ["Бабушка-Телеком INC.", "Wi-Fi соседа (без пароля)", "Кабель, частично перекушенный домашним котом"];
+                        const fakeDevices = ["Утюг с поддержкой Smart-TV", "Игровой кухонный тапок Pro", "Микроволновка на Android 4.4"];
+
+                        results.innerHTML = `
+                            <div style="color:#ff3333; font-weight:900; margin-bottom:10px; font-size:12px;">📊 ДАННЫЕ УСПЕШНО 'ИЗВЛЕЧЕНЫ':</div>
+                            <div>👤 <b>ЦЕЛЬ:</b> ${targetName}</div>
+                            <div>🌐 <b>IP-АДРЕС:</b> ${fakeIps[Math.floor(Math.random()*fakeIps.length)]}</div>
+                            <div>🏠 <b>ЛОКАЦИЯ:</b> ${fakeLocations[Math.floor(Math.random()*fakeLocations.length)]}</div>
+                            <div>📶 <b>ПРОВАЙДЕР:</b> ${fakeProviders[Math.floor(Math.random()*fakeProviders.length)]}</div>
+                            <div>📱 <b>УСТРОЙСТВО:</b> ${fakeDevices[Math.floor(Math.random()*fakeDevices.length)]}</div>
+                            <div style="color:#ff3333; margin-top:12px; font-weight:bold; animation: vhsBlink 0.5s infinite steps(2);">🚨 ВНИМАНИЕ: ФЕЙКОВАЯ ГРУППА СВАТОВЦЕВ УЖЕ ВЫЕХАЛА. ОЖИДАЙТЕ ДОСТАВКУ ПИЦЦЫ И ГРОМКИЙ СТУК!</div>
+                        `;
+                        results.style.display = 'block';
+                        closeBtn.style.display = 'block';
+                    }, 1200);
+                }, 1200);
+            }, 1200);
+        }
+
+        function triggerAudioNuke(activate) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (activate) {
+                    if (audioOsc) return;
+                    audioOsc = audioCtx.createOscillator();
+                    audioGain = audioCtx.createGain();
+                    audioOsc.type = 'square';
+                    audioOsc.frequency.setValueAtTime(60, audioCtx.currentTime);
+                    audioGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                    audioOsc.connect(audioGain);
+                    audioGain.connect(audioCtx.destination);
+                    audioOsc.start();
+                    
+                    audioInterval = setInterval(() => {
+                        audioOsc.frequency.setValueAtTime(Math.random() * 120 + 40, audioCtx.currentTime);
+                    }, 80);
+                } else {
+                    if (audioOsc) { audioOsc.stop(); audioOsc.disconnect(); audioOsc = null; }
+                    if (audioInterval) { clearInterval(audioInterval); audioInterval = null; }
+                }
+            } catch(e) {}
+        }
+
+        function triggerMemePopups(activate) {
+            clearInterval(memeInterval);
+            if (!activate) return;
+            const textMemes = ["🎬 RENDER OVERLOAD!", "🚽 SKIBIDI IS HERE", "💡 PROFESSIONAL LIGHTING", "😱 OH MY GOD", "🔥 POWER CAT!", "🚀 SFM CRASH"];
+            memeInterval = setInterval(() => {
+                const d = document.createElement('div');
+                d.className = 'floating-meme-text';
+                d.innerText = textMemes[Math.floor(Math.random() * textMemes.length)];
+                d.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+                d.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+                document.body.appendChild(d);
+                setTimeout(() => d.remove(), 2000);
+            }, 400);
+        }
+
+        function buildWatermarks() {
+            const container = document.getElementById('watermarks-overlay');
+            container.innerHTML = '';
+            for(let i=0; i<12; i++) {
+                const el = document.createElement('div');
+                el.className = 'wm-classic';
+                el.innerText = i % 2 === 0 ? "Unregistered HyperCam 2" : "www.BANDICAM.com";
+                el.style.left = Math.random() * 80 + 'vw';
+                el.style.top = Math.random() * 90 + 'vh';
+                container.appendChild(el);
+            }
+        }
 
         db.ref('siteData').on('value', (snapshot) => {
             const data = snapshot.val();
@@ -386,7 +653,6 @@
             document.getElementById('txt-phonk-track').value = data.currentTrack || "PHONK MANIA VOL.1 (SLOWED)";
             document.getElementById('maintenance-block').style.display = data.maintenanceActive ? 'flex' : 'none';
             document.getElementById('chk-maintenance').checked = data.maintenanceActive || false;
-
             document.getElementById('lbl-author-status').innerHTML = `STATUS: <span>${data.authorStatus || 'ONLINE'}</span>`;
             document.getElementById('sel-author-status').value = data.authorStatus || 'ONLINE';
 
@@ -398,13 +664,9 @@
             document.getElementById('txt-online-count').value = data.onlineCount || "1,240";
             document.getElementById('chk-show-online').checked = data.showOnline || false;
 
-            const onlineCounter = document.getElementById('lbl-online-counter');
-            if (data.showOnline) {
-                onlineCounter.style.display = 'inline-block';
-                onlineCounter.innerText = `🔥 ${data.onlineCount || '1,240'} animators online`;
-            } else {
-                onlineCounter.style.display = 'none';
-            }
+            // Сверх-Анонсы Синхронизация полей ввода
+            document.getElementById('txt-mega-msg').value = data.megaAnnouncementText || "";
+            document.getElementById('txt-dox-target').value = data.fakeDoxTarget || "";
 
             const box = document.getElementById('main-announcement-zone');
             const badge = document.getElementById('badge-element');
@@ -415,72 +677,102 @@
             clearInterval(timerInterval);
 
             if (data.urgentMessageActive) {
-                box.classList.add('urgent-mode');
-                badge.className = "badge urgent";
-                badge.innerText = "🚨 URGENT";
-                title.innerHTML = 'Awaiting urgent message from Dachair?!<div class="typing-loader"><span></span><span></span><span></span></div>';
+                box.classList.add('urgent-mode'); badge.className = "badge urgent"; badge.innerText = "🚨 URGENT";
+                title.innerHTML = 'Awaiting urgent message...<div class="typing-loader"><span></span><span></span><span></span></div>';
                 desc.innerText = data.fanMessage ? data.fanMessage : "The creator is drafting a statement...";
                 timerDisp.style.display = "none";
-            } 
-            else if (data.fanMessage && data.fanMessage.trim() !== "") {
-                box.classList.remove('urgent-mode');
-                badge.className = "badge";
-                badge.innerText = "💬 MESSAGE";
-                title.innerText = data.customTitle ? data.customTitle : "Dachair?! says:";
-                desc.innerText = data.fanMessage;
+            } else if (data.fanMessage && data.fanMessage.trim() !== "") {
+                box.classList.remove('urgent-mode'); badge.className = "badge"; badge.innerText = "💬 MESSAGE";
+                title.innerText = data.customTitle ? data.customTitle : "Dachair?! says:"; desc.innerText = data.fanMessage;
                 timerDisp.style.display = "none";
-            } 
-            else {
-                box.classList.remove('urgent-mode');
-                badge.className = "badge";
+            } else {
+                box.classList.remove('urgent-mode'); badge.className = "badge";
                 if (data.showTimer) {
-                    badge.innerText = "COUNTDOWN";
-                    title.innerText = data.customTitle ? data.customTitle : "NEXT EPISODE RELEASE";
-                    desc.innerText = "Production is entering final stages. Get ready for the premiere!";
-                    timerDisp.style.display = "block";
+                    badge.innerText = "COUNTDOWN"; title.innerText = data.customTitle ? data.customTitle : "NEXT EPISODE RELEASE";
+                    desc.innerText = "Production is entering final stages."; timerDisp.style.display = "block";
                     startCountdown(data.timerDate);
                 } else {
-                    badge.innerText = "COMING SOON";
-                    title.innerText = data.customTitle ? data.customTitle : "Awaiting Announcement";
-                    desc.innerText = "The release timer is temporarily hidden. Precise countdown coming soon!";
-                    timerDisp.style.display = "none";
+                    badge.innerText = "COMING SOON"; title.innerText = data.customTitle ? data.customTitle : "Awaiting Announcement";
+                    desc.innerText = "The release timer is temporarily hidden."; timerDisp.style.display = "none";
                 }
             }
 
+            // Sync Base Abuse
             document.getElementById('screamer-element').style.display = data.abuse?.screamer ? 'block' : 'none';
             document.getElementById('fake-404').style.display = data.abuse?.error404 ? 'block' : 'none';
             document.getElementById('fake-504').style.display = data.abuse?.error504 ? 'block' : 'none';
             document.getElementById('ban-block').style.display = data.abuse?.banActive ? 'flex' : 'none';
+            document.getElementById('fake-bsod').style.display = data.abuse?.bsod ? 'block' : 'none';
+            document.getElementById('matrix-override').style.display = data.abuse?.matrix ? 'block' : 'none';
             
-            if (data.abuse?.glitch) document.body.classList.add('glitch-active');
-            else document.body.classList.remove('glitch-active');
+            if (data.abuse?.matrix) startMatrixTerminal(); else stopMatrixTerminal();
+            if (data.abuse?.flip) document.documentElement.classList.add('flip-active'); else document.documentElement.classList.remove('flip-active');
+            if (data.abuse?.earthquake) document.body.classList.add('earthquake-active'); else document.body.classList.remove('earthquake-active');
+            if (data.abuse?.glitch) document.body.classList.add('glitch-active'); else document.body.classList.remove('glitch-active');
+            if (data.abuse?.fried) document.body.classList.add('fried-active'); else document.body.classList.remove('fried-active');
+            if (data.abuse?.gravity) document.body.classList.add('gravity-active'); else document.body.classList.remove('gravity-active');
+            if (data.abuse?.spam) startErrorCascade(); else stopErrorCascade();
+            if (data.abuse?.skibidiText) triggerSkibidiTextOverride(true); else triggerSkibidiTextOverride(false);
+
+            // Sync Supreme 10 Functions
+            document.getElementById('watermarks-overlay').style.display = data.abuse?.watermark ? 'block' : 'none';
+            if (data.abuse?.watermark) buildWatermarks();
+            
+            setupFleeingButtons(data.abuse?.flee);
+            document.getElementById('vhs-overlay').style.display = data.abuse?.vhs ? 'block' : 'none';
+            
+            if (data.abuse?.lowfps) document.body.classList.add('lowfps-active');
+            else document.body.classList.remove('lowfps-active');
+
+            const styleTag = document.getElementById('main-styles');
+            if (data.abuse?.nocss) styleTag.setAttribute('disabled', 'true');
+            else styleTag.removeAttribute('disabled');
+
+            document.getElementById('cinematic-top').style.height = data.abuse?.cinematic ? 'calc(50vh - 30px)' : '0vh';
+            document.getElementById('cinematic-bottom').style.height = data.abuse?.cinematic ? 'calc(50vh - 30px)' : '0vh';
+            document.getElementById('captcha-box').style.display = data.abuse?.captcha ? 'block' : 'none';
+            
+            if (data.abuse?.ghost) document.body.classList.add('ghost-active');
+            else document.body.classList.remove('ghost-active');
+
+            triggerMemePopups(data.abuse?.memePopup);
+            triggerAudioNuke(data.abuse?.audioNuke);
+
+            // 👑 СИНХРОНИЗАЦИЯ НОВЫХ ФУНКЦИЙ СВЕРХ-АННОНСОВ
+            if (data.abuse?.megaAnnouncement) {
+                document.getElementById('mega-announcement-overlay').style.display = 'flex';
+                document.getElementById('lbl-mega-text').innerText = data.megaAnnouncementText || "Важное системное оповещение от Dachair?!";
+            } else {
+                document.getElementById('mega-announcement-overlay').style.display = 'none';
+            }
+
+            if (data.abuse?.fakeDox) {
+                if (!localFakeDoxActive) {
+                    localFakeDoxActive = true;
+                    runFakeDoxSimulation(data.fakeDoxTarget || "Случайный Аниматор");
+                }
+            } else {
+                localFakeDoxActive = false;
+                document.getElementById('fake-dox-overlay').style.display = 'none';
+            }
 
             if (data.abuse?.ddos) {
                 document.body.classList.add('ddos-lagging');
                 document.getElementById('ddos-site-warning').style.display = 'block';
                 document.getElementById('ddos-overlay').style.display = 'block';
-                document.getElementById('lbl-realtime-ping').innerText = "4820 ms";
-                document.getElementById('lbl-realtime-ping').style.color = "#ff3333";
-                document.getElementById('lbl-realtime-load').innerText = "142.8k rps";
-                document.getElementById('lbl-realtime-load').style.color = "#ff3333";
                 startDdosLogs();
             } else {
                 document.body.classList.remove('ddos-lagging');
                 document.getElementById('ddos-site-warning').style.display = 'none';
                 document.getElementById('ddos-overlay').style.display = 'none';
-                document.getElementById('lbl-realtime-ping').innerText = "28 ms";
-                document.getElementById('lbl-realtime-ping').style.color = "var(--accent-green)";
-                document.getElementById('lbl-realtime-load').innerText = "4 rps";
-                document.getElementById('lbl-realtime-load').style.color = "var(--accent-green)";
                 clearInterval(ddosInterval);
             }
 
             if (data.abuse?.party) {
                 document.body.style.animation = "interfaceLag 0.05s infinite alternate";
                 document.body.style.filter = "hue-rotate(120deg) contrast(1.3)";
-            } else if (!data.abuse?.ddos) {
-                document.body.style.animation = "none";
-                document.body.style.filter = "none";
+            } else if (!data.abuse?.ddos && !data.abuse?.fried) {
+                document.body.style.animation = "none"; document.body.style.filter = "none";
             }
 
             updateAbuseButtonsUI(data.abuse);
@@ -489,29 +781,62 @@
         function startDdosLogs() {
             if(ddosInterval) clearInterval(ddosInterval);
             const container = document.getElementById('ddos-log-container');
-            const ips = ["194.226.43.11", "45.138.5.192", "88.201.15.4", "178.90.201.44"];
-            const methods = ["GET /index.html HTTP/1.1", "POST /api/v3/status HTTP/1.1"];
-            
             ddosInterval = setInterval(() => {
                 document.getElementById('ddos-clock').innerText = new Date().toLocaleTimeString();
-                const randomIp = ips[Math.floor(Math.random() * ips.length)];
-                const randomMethod = methods[Math.floor(Math.random() * methods.length)];
-                container.innerHTML += `<div>[ATTACK] ${randomIp} -> OVERLOAD: ${randomMethod}</div>`;
+                container.innerHTML += `<div>[ATTACK] CORE TRAFFIC OVERLOAD LAYER-7</div>`;
                 if(container.childNodes.length > 25) container.removeChild(container.firstChild);
                 container.scrollTop = container.scrollHeight;
             }, 120);
         }
 
+        function startMatrixTerminal() {
+            if(matrixInterval) return;
+            const container = document.getElementById('matrix-log-container');
+            matrixInterval = setInterval(() => {
+                container.innerHTML += `<div>[${new Date().toLocaleTimeString()}] BYPASS HUB FIREWALL... ACCESS DENIED</div>`;
+                if(container.childNodes.length > 35) container.removeChild(container.firstChild);
+            }, 150);
+        }
+        function stopMatrixTerminal() { clearInterval(matrixInterval); matrixInterval = null; }
+
+        function startErrorCascade() {
+            if (cascadeInterval) return;
+            const overlay = document.getElementById('error-cascade-overlay');
+            overlay.style.display = 'block'; let spawnCount = 0;
+            cascadeInterval = setInterval(() => {
+                if (spawnCount > 40) return;
+                const win = document.createElement('div'); win.className = 'retro-error-box';
+                win.style.left = (15 + (spawnCount * 18) % (window.innerWidth - 330)) + 'px';
+                win.style.top = (40 + (spawnCount * 18) % (window.innerHeight - 180)) + 'px';
+                win.innerHTML = `<div class="retro-title"><span>⚠️ SYSTEM OVERFLOW</span></div><div class="retro-body"><p>SFM render memory leaks detected!</p><button class="retro-btn" onclick="this.parentElement.parentElement.remove()">OK</button></div>`;
+                overlay.appendChild(win); spawnCount++;
+            }, 250);
+        }
+        function stopErrorCascade() { clearInterval(cascadeInterval); cascadeInterval = null; const o = document.getElementById('error-cascade-overlay'); o.innerHTML = ''; o.style.display = 'none'; }
+
+        function triggerSkibidiTextOverride(activate) {
+            if (!activate) {
+                if (originalTextNodes.length > 0) { originalTextNodes.forEach(item => item.node.nodeValue = item.oldVal); originalTextNodes = []; }
+                return;
+            }
+            if (originalTextNodes.length > 0) return;
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+            let node; const words = ["SKIBIDI 🚽", "DACHAIR?!", "RENDER 🎬", "BOOM!"];
+            while (node = walker.nextNode()) {
+                const parent = node.parentElement;
+                if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.closest('#admin-panel-v3')) continue;
+                if (node.nodeValue.trim().length > 3) {
+                    originalTextNodes.push({ node: node, oldVal: node.nodeValue });
+                    node.nodeValue = words[Math.floor(Math.random() * words.length)];
+                }
+            }
+        }
+
         function startCountdown(targetDate) {
             const target = new Date(targetDate).getTime();
             timerInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const diff = target - now;
-                if (diff <= 0) {
-                    document.getElementById('timer-container').innerText = "00:00:00:00";
-                    clearInterval(timerInterval);
-                    return;
-                }
+                const diff = target - new Date().getTime();
+                if (diff <= 0) { document.getElementById('timer-container').innerText = "00:00:00:00"; clearInterval(timerInterval); return; }
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
                 const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
@@ -521,43 +846,28 @@
         }
 
         function updateAbuseButtonsUI(abuse) {
-            setBtnState('btn-screamer', abuse?.screamer);
-            setBtnState('btn-404', abuse?.error404);
-            setBtnState('btn-ddos', abuse?.ddos);
-            setBtnState('btn-504', abuse?.error504);
-            setBtnState('btn-glitch', abuse?.glitch);
-            setBtnState('btn-ban', abuse?.banActive);
+            const keys = ['screamer', 'error404', 'ddos', 'error504', 'glitch', 'banActive', 'bsod', 'matrix', 'flip', 'earthquake', 'fried', 'gravity', 'spam', 'skibidiText', 'watermark', 'flee', 'vhs', 'lowfps', 'nocss', 'cinematic', 'captcha', 'ghost', 'memePopup', 'audioNuke', 'megaAnnouncement', 'fakeDox'];
+            const ids = ['btn-screamer', 'btn-404', 'btn-ddos', 'btn-504', 'btn-glitch', 'btn-ban', 'btn-bsod', 'btn-matrix', 'btn-flip', 'btn-earthquake', 'btn-fried', 'btn-gravity', 'btn-spam', 'btn-skibidi-text', 'btn-watermark', 'btn-flee', 'btn-vhs', 'btn-lowfps', 'btn-nocss', 'btn-cinematic', 'btn-captcha', 'btn-ghost', 'btn-meme-popup', 'btn-audio-nuke', 'btn-trigger-mega', 'btn-trigger-dox'];
             
-            const partyBtn = document.getElementById('btn-party-hard');
-            if (abuse?.party) partyBtn.classList.add('active');
-            else partyBtn.classList.remove('active');
-        }
-
-        function setBtnState(id, isActive) {
-            const btn = document.getElementById(id);
-            if (!btn) return;
-            if (isActive) btn.classList.add('active');
-            else btn.classList.remove('active');
+            ids.forEach((id, i) => {
+                const btn = document.getElementById(id);
+                if(btn && abuse) {
+                    if (abuse[keys[i]]) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                }
+            });
+            const pBtn = document.getElementById('btn-party-hard');
+            if (abuse?.party) pBtn.classList.add('active'); else pBtn.classList.remove('active');
         }
 
         document.getElementById('rng-sfm').addEventListener('input', (e) => document.getElementById('lbl-sfm').innerText = e.target.value + '%');
         document.getElementById('rng-vfx').addEventListener('input', (e) => document.getElementById('lbl-vfx').innerText = e.target.value + '%');
 
-        setupAbuseToggle('btn-screamer');
-        setupAbuseToggle('btn-404');
-        setupAbuseToggle('btn-ddos');
-        setupAbuseToggle('btn-504');
-        setupAbuseToggle('btn-glitch');
-        setupAbuseToggle('btn-ban');
-        setupAbuseToggle('btn-party-hard');
-
-        function setupAbuseToggle(id) {
-            const btn = document.getElementById(id);
-            if (!btn) return;
-            btn.addEventListener('click', function() {
-                this.classList.toggle('active');
-            });
-        }
+        const allButtons = ['btn-screamer', 'btn-404', 'btn-ddos', 'btn-504', 'btn-glitch', 'btn-ban', 'btn-bsod', 'btn-matrix', 'btn-flip', 'btn-earthquake', 'btn-party-hard', 'btn-fried', 'btn-gravity', 'btn-spam', 'btn-skibidi-text', 'btn-watermark', 'btn-flee', 'btn-vhs', 'btn-lowfps', 'btn-nocss', 'btn-cinematic', 'btn-captcha', 'btn-ghost', 'btn-meme-popup', 'btn-audio-nuke', 'btn-trigger-mega', 'btn-trigger-dox'];
+        allButtons.forEach(id => {
+            const b = document.getElementById(id);
+            if(b) b.addEventListener('click', function() { this.classList.toggle('active'); });
+        });
 
         function updateFirebaseData() {
             db.ref('siteData').update({
@@ -573,6 +883,11 @@
                 authorStatus: document.getElementById('sel-author-status').value,
                 currentTrack: document.getElementById('txt-phonk-track').value,
                 maintenanceActive: document.getElementById('chk-maintenance').checked,
+                
+                // Данные финала
+                megaAnnouncementText: document.getElementById('txt-mega-msg').value,
+                fakeDoxTarget: document.getElementById('txt-dox-target').value,
+
                 abuse: {
                     screamer: document.getElementById('btn-screamer').classList.contains('active'),
                     error404: document.getElementById('btn-404').classList.contains('active'),
@@ -580,9 +895,31 @@
                     error504: document.getElementById('btn-504').classList.contains('active'),
                     glitch: document.getElementById('btn-glitch').classList.contains('active'),
                     banActive: document.getElementById('btn-ban').classList.contains('active'),
-                    party: document.getElementById('btn-party-hard').classList.contains('active')
+                    bsod: document.getElementById('btn-bsod').classList.contains('active'),
+                    matrix: document.getElementById('btn-matrix').classList.contains('active'),
+                    flip: document.getElementById('btn-flip').classList.contains('active'),
+                    earthquake: document.getElementById('btn-earthquake').classList.contains('active'),
+                    party: document.getElementById('btn-party-hard').classList.contains('active'),
+                    fried: document.getElementById('btn-fried').classList.contains('active'),
+                    gravity: document.getElementById('btn-gravity').classList.contains('active'),
+                    spam: document.getElementById('btn-spam').classList.contains('active'),
+                    skibidiText: document.getElementById('btn-skibidi-text').classList.contains('active'),
+                    watermark: document.getElementById('btn-watermark').classList.contains('active'),
+                    flee: document.getElementById('btn-flee').classList.contains('active'),
+                    vhs: document.getElementById('btn-vhs').classList.contains('active'),
+                    lowfps: document.getElementById('btn-lowfps').classList.contains('active'),
+                    nocss: document.getElementById('btn-nocss').classList.contains('active'),
+                    cinematic: document.getElementById('btn-cinematic').classList.contains('active'),
+                    captcha: document.getElementById('btn-captcha').classList.contains('active'),
+                    ghost: document.getElementById('btn-ghost').classList.contains('active'),
+                    memePopup: document.getElementById('btn-meme-popup').classList.contains('active'),
+                    audioNuke: document.getElementById('btn-audio-nuke').classList.contains('active'),
+                    
+                    // Режимы финального анонса
+                    megaAnnouncement: document.getElementById('btn-trigger-mega').classList.contains('active'),
+                    fakeDox: document.getElementById('btn-trigger-dox').classList.contains('active')
                 }
-            }).then(() => alert("Данные хаба успешно обновлены!"));
+            }).then(() => alert("Конфигурация Хаоса синхронизирована!"));
         }
     </script>
 </body>
